@@ -1,0 +1,101 @@
+{% load static %}
+<html>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="{% static 'index.js' %}"></script>
+	<body>
+		{% if not IS_END %}
+		<form id="frm" method="post">
+			{% csrf_token %}
+			<select name="type" id="type" required>
+				<option value="buy">buy</option>
+				<option value="sell">sell</option>
+			</select>
+			<input type="number" placeholder="quantity" id="quantity" name="quantity" required>
+			<input type="number" placeholder="price" id="price" name="price" required>
+			<input type="button" onclick="submit_my_form()" value="Add trade">
+			<input type="button" onclick="end_trade()" value="End trade">
+		</form>
+		
+		<hr>
+		{% endif %}
+		<h1 align="center">Trade report</h1>
+		<br>
+		<table border="1" width="80%" align="center" style="
+		 	border-collapse: collapse;
+			border-color:black;
+		 ">
+			<tr>
+				<td>
+					Type
+				</td>
+				<td>
+					Stock name
+				</td>
+				<td>
+					Date
+				</td>
+				<td>
+					Quantity
+				</td>
+				<td>
+					Price
+				</td>
+				<td>
+					Total
+				</td>
+				<td>
+					Emotion
+				</td>
+			</tr>
+			{% for i in rows %}
+			
+				<tr>
+					<td>
+						{{i.0}}
+					</td>
+					<td>
+						{{i.1}}
+					</td>
+					<td>
+						{{i.2}}
+					</td>
+					<td>
+						{{i.3}}
+					</td>
+					<td>
+						{{i.4}}
+					</td>
+					<td>
+						{{i.5}}
+					</td>
+					<td>
+						{% if i.8 != None %}
+							{{i.8}}
+						{% endif %}
+					</td>
+				</tr>
+			{% endfor %}
+<tr>
+					<td>
+						
+					</td>
+					<td>
+						
+					</td>
+					<td>
+						
+					</td>
+					<td>
+						{{TOTAL_QUANTITY}}
+					</td>
+					<td>
+						
+					</td>
+					<td>
+						{{TOTAL_INVESTMENT}}
+					</td>
+				</tr>
+		</table>
+		<br>
+	</body>
+</html>

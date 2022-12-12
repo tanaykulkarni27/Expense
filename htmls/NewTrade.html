@@ -1,0 +1,19 @@
+{% load static %}
+<html>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="{% static 'newtrade.js' %}"></script>
+	<body>
+		<form id="frm" method="post">
+			{% csrf_token %}
+			<select name="type" id="type" required>
+				<option value="buy">buy</option>
+				<option value="sell">sell</option>
+			</select>
+			<br>
+			<input type="text" autocomplete="off" placeholder="name of stock" id="name" name="name" required><br>
+			<input type="number" placeholder="quantity" id="quantity" name="quantity" required><br>
+			<input type="number" placeholder="price" id="price" name="price" required><br>
+			<input type="button" onclick="submit_my_form()" value="Add trade"><br>
+		</form>
+	</body>
+</html>

@@ -1,0 +1,45 @@
+{% load static %}
+<html>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script src="{% static 'index.js' %}"></script>
+	<body onload="load_whole_data({{PnL}},[['x','y'],['profit',1000],['loss',300]],{{P}},{{L}})">
+		<h3>P&L analysis : </h3>
+		<table width="80%">
+			<tr>
+				<td>
+					<div width="400px" height="400px" id="graph"></div>
+				</td>
+				<td>
+					<div id="holograph"></div>
+				</td>
+			</tr>
+		
+		</table>
+		<form>
+			{% csrf_token %}
+		<input type="number" name="Profit" id="Profit" placeholder="Add Profit">
+		<input type="button" onclick="add_PnL()" value="Add PnL">
+		</form>
+		<hr>
+		<table>
+			<tr>
+				<td>
+					Name
+				</td>
+				<td>
+					<a href="/NewTrade"><Button>New Trade</Button></a>
+				</td>
+			</tr>
+			
+			{% for i in trades %}
+				<tr>
+					<td>
+						<a href="/report/{{i.1}}/{{i.0}}">{{i.1}}</a>
+					</td>
+				</tr>
+			{% endfor %}
+			
+		</table>
+	</body>	
+</html>
