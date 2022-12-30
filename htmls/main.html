@@ -1,6 +1,44 @@
+{% load static %}
 <html>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="{% static 'main.js' %}"></script>
 	<body>
 		<a href="/ie"> <input type="button" value="Income & Expense"/></a>
 		<a href="/pnl"> <input type="button" value="P&L"/></a>
+		{% csrf_token %}
+		<input type="date" id="date">
+		<input type="address" id="work" placeholder="mention your work" style="width: 250px;">
+		<input type="button" value="add schedule" onclick="add_schedule()">
+		<br><br>
+		<table border="1" width="80%" style="
+		 	border-collapse: collapse;
+			border-color:black;
+		 ">
+		 	<tr>
+				<td>
+					Date
+				</td>
+				<td>
+					Work
+				</td>
+				<td>
+
+				</td>
+			</tr>
+			{% for i in data %}
+				<tr>
+					<td>
+						{{i.1}}
+					</td>
+					<td>
+						{{i.2}}
+					</td>
+					<td>
+						
+						<input type="button" value="delete" onclick="delete_record({{i.0}},'{{ csrf_token }}')"/>
+					</td>
+				</tr>
+			{% endfor %}
+		 </table>
 	</body>	
 </html>

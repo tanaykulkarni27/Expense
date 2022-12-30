@@ -10,10 +10,10 @@
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript" src="{% static  'IncomeExpense.js' %}"></script>
     </head>
-    <body onload="load_charts({{ExpenseData}})">
-        <h1>Income Expense Monitoring</h1>
-        <input type="number" id="Exp_amnt" name="amnt"placeholder="Expense Amount" ><button value="" onclick="add_expense()">Add Expense</button>
-        <input type="number" id="Inc_amnt" name="amnt" placeholder="Income amount"><button value="" onclick="add_expense()">Add Income</button>
+    <body onload="load_charts({{ExpenseData}},{{IncomeData}})">
+        <h1>Income Expense Monitor</h1>
+        <input type="number" id="Exp_amnt" name="eamnt"placeholder="Expense Amount" ><button value="" onclick="add_Expense()">Add Expense</button>
+        <input type="number" id="Inc_amnt" name="iamnt" placeholder="Income amount"><button value="" onclick="add_Income()">Add Income</button>
         <input type="text" id="date" name="Date" placeholder="From date"><button value="" onclick="add_expense()">Show from</button>
         {% csrf_token %}
         <p id="avg"></p>

@@ -32,11 +32,10 @@ class trade:
 			return y
 		return cursor.execute(f'''SELECT * FROM TRADE WHERE TRADE_ID == '{trade_id}' ''')
 
-	def insert(self,tp,name,quantity,price,Trade_Id):
-		total = float(price * quantity,3)
+	def insert(self,tp,name,quantity,price,Trade_Id,emotion):
+		total = float(price * quantity)
 		date = str(datetime.today().strftime('%d-%m-%y'))
-		print(date)
-		cursor.execute(f'''INSERT INTO TRADE(type,name,date,quantity,price,total,TRADE_ID,IS_END) VALUES('{tp}','{name}','{date}',{quantity},{price},{total},{Trade_Id},0)''')
+		cursor.execute(f'''INSERT INTO TRADE(type,name,date,quantity,price,total,TRADE_ID,IS_END,Reason) VALUES('{tp}','{name}','{date}',{quantity},{price},{total},{Trade_Id},0,'{emotion}')''')
 		commit()
 		
 	def init(self):
@@ -123,3 +122,12 @@ class Income:
 		commit()
 	def get_all(self):
 		return cursor.execute(f'''SELECT * FROM Income''')
+class schedule:
+	def insert(self,date,work):
+		cursor.execute(f'insert into schedule(date,work) values("{date}","{work}")');
+		commit();
+	def delete(self,id):
+		cursor.execute(f'delete from schedule where id = {id}');
+		commit();
+	def get_all(self):
+		return cursor.execute(f'select * from schedule order by date');

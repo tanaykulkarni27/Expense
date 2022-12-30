@@ -18,8 +18,10 @@ function load_chart_Expense(database_data){
 		avg += database_data[itr][1];
 		itr--;
 	}
+	var tot  = avg;
 	avg /= cnt;
-	document.getElementById('avg').innerHTML = "Avg : " + avg;
+	avg = avg.toFixed(2);
+	document.getElementById('avg').innerHTML = "Total : " + tot + "<br>Avg : " + avg;
 }
 
 function load_chart_Income(database_data){
@@ -35,12 +37,27 @@ function load_chart_Income(database_data){
 }
 
 
-function add_expense(){
+function add_Expense(){
     $.ajax({
 		type : "POST",
 		data:{
 			csrfmiddlewaretoken:$('input[name="csrfmiddlewaretoken"]')[0].value,
-			Eamnt:document.getElementById('Exp_amnt').value
+			Eamnt:document.getElementById('Exp_amnt').value,
+			type:'expense'
+		},
+		success:function(data){
+			location.reload();
+		}
+	});
+}
+
+function add_Income(){
+    $.ajax({
+		type : "POST",
+		data:{
+			csrfmiddlewaretoken:$('input[name="csrfmiddlewaretoken"]')[0].value,
+			Iamnt:document.getElementById('Inc_amnt').value,
+			type:'income'
 		},
 		success:function(data){
 			location.reload();
@@ -49,8 +66,7 @@ function add_expense(){
 }
 
 
-function load_charts(data){
-	
-	load_chart_Expense(data);
-	load_chart_Income(data);
-}
+function load_charts(expense_data,income_data){
+	load_chart_Expense(expense_data);
+	load_chart_Income(income_data);
+} 

@@ -67,7 +67,8 @@ def view_report(req,trade_name,Trade_Id = None):
 		tp = req.POST.get('type')
 		price = float(req.POST.get('price'))
 		quantity = int(req.POST.get('quantity'))
-		trade.insert(tp,name,quantity,price,Trade_Id)
+		emotion  = req.POST.get("emotion");
+		trade.insert(tp,name,quantity,price,Trade_Id,emotion)
 	if req.GET.get('TYP') == 'end_trade':
 		trade.end_trade(Trade_Id);
 	context = dict()
@@ -98,27 +99,43 @@ def NewTrade(req):
 		tp = req.POST.get('type')
 		price = float(req.POST.get('price'))
 		quantity = int(req.POST.get('quantity'))
-		trade.insert(tp,name,quantity,price,Trade_Id)
+		emotion  = req.POST.get("emotion");
+		trade.insert(tp,name,quantity,price,Trade_Id,emotion)
 		with open('main/ID.txt','w') as f:
 			Trade_Id += 1
 			f.write(f'{Trade_Id}')
 	return render(req,'NewTrade.html')
 
 def main(req):
-	return render(req,'main.html')
-
+	if req.method == "POST":
+		db.schedule().insert(req.POST.get('date'),req.POST.get('work'));
+	elif req.GET.get('type') == "delete":
+		db.schedule().delete(req.GET.get('id'));
+	context = dict();
+	context['data'] = db.schedule().get_all();
+	return render(req,'main.html',context)
 
 class IncomeExpense: 
 	def ExpenseHandler(self,req):
 		if req.method == "POST": 
-			amnt = int(req.POST.get('Eamnt'))
-			db.Expense().insert(amnt)
+			if req.POST.get('type') == 'expense':
+				amnt = int(req.POST.get('Eamnt'))
+				db.Expense().insert(amnt)
 		expenses = [['Date','Expense']]
 		for i in db.Expense().get_all():
 			expenses.append(list(i))
 		return {"ExpenseData" : expenses}
-		
+	def IncomeHandler(self,req):
+		if req.method == "POST": 
+			if req.POST.get('type') == 'income':
+				amnt = int(req.POST.get('Iamnt'))
+				db.Income().insert(amnt)
+		incomes = [['Date','Income']]
+		for i in db.Income().get_all():
+			incomes.append(list(i))
+		return {"IncomeData" : incomes}
 	def Handler(self,req):
 		context = self.ExpenseHandler(req);
+		context.update(self.IncomeHandler(req));
 		return render(req,'expense.html',context)
 

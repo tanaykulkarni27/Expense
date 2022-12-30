@@ -1,5 +1,4 @@
 function submit_my_form(){
-	
 	$.ajax({
 		type : "POST",
 		//~ url : "",
@@ -8,7 +7,8 @@ function submit_my_form(){
 			type:document.getElementById("type").value,
 			name:document.getElementById("name").value,
 			quantity:document.getElementById("quantity").value,
-			price:document.getElementById("price").value
+			price:document.getElementById("price").value,
+			emotion:document.getElementById("emotion").value
 		},
 		success:function(data){
 			location.href="/";
