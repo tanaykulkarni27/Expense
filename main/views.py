@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from . import db_handler as db
 from threading import Thread
 import os
+from functools import cmp_to_key
 
 '''
 
@@ -12,6 +13,20 @@ calculate profit :
 	total invested value - total sold 
 
 '''
+def compare_dates(x,y):
+		x = x[0].split('-');
+		y = y[0].split('-');
+		for i in range(2,-1):
+			if int(y[i]) < int(i):
+				return False
+		return True
+def comparator(x,y):
+	if compare_dates(x,y):
+		return 1
+	elif compare_dates(y,x):
+		return -1
+	return 0;
+
 class Cdict():
 	def __init__(self):
 		self.D = dict() 
@@ -115,15 +130,21 @@ def main(req):
 	context['data'] = db.schedule().get_all();
 	return render(req,'main.html',context)
 
+def f(x,y):
+	print(x,y)
+	return x;	
+
 class IncomeExpense: 
 	def ExpenseHandler(self,req):
 		if req.method == "POST": 
 			if req.POST.get('type') == 'expense':
 				amnt = int(req.POST.get('Eamnt'))
 				db.Expense().insert(amnt)
-		expenses = [['Date','Expense']]
+		expenses = []
 		for i in db.Expense().get_all():
 			expenses.append(list(i))
+		expenses = sorted(expenses,key = cmp_to_key(compare_dates));
+		expenses.insert(0,['Date','Expense'])
 		return {"ExpenseData" : expenses}
 	def IncomeHandler(self,req):
 		if req.method == "POST": 
