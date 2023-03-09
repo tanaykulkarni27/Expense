@@ -4,7 +4,7 @@ from . import db_handler as db
 from threading import Thread
 import os
 from functools import cmp_to_key
-
+from .initialize import run
 '''
 
 end trade validate : 
@@ -14,19 +14,40 @@ calculate profit :
 
 '''
 def compare_dates(x,y):
-		x = x[0].split('-');
-		y = y[0].split('-');
-		for i in range(2,-1):
-			if int(y[i]) < int(i):
+		x = x.split('-');
+		y = y.split('-');
+		for i in range(2,-1,-1):
+			if int(y[i]) < int(x[i]):
 				return False
+			elif int(y[i]) > int(x[i]):
+				return True
+		# print(x,y)
 		return True
-def comparator(x,y):
-	if compare_dates(x,y):
-		return 1
-	elif compare_dates(y,x):
-		return -1
-	return 0;
+# implement merge sort
+def mergesort(a):
+	if len(a) == 1:
+		return a
+	z = []
+	mid = len(a) // 2
+	x = mergesort(a[:mid])
+	y = mergesort(a[mid:])
+	i = 0;j = 0;
+	while i < len(x) and j < len(y):
+		if compare_dates(x[i][0],y[j][0]):
+			z.append(x[i])
+			i += 1
+		else:
+			z.append(y[j])
+			j += 1
+	while i < len(x):
+		z.append(x[i])
+		i += 1
 
+	while j < len(y):
+		z.append(y[j])
+		j += 1
+	return z
+	
 class Cdict():
 	def __init__(self):
 		self.D = dict() 
@@ -44,6 +65,7 @@ class Cdict():
 		return self.D	
 		
 def home(req):	
+	run()
 	# data objects
 	trade = db.trade()
 	PnL = db.PnL()
@@ -130,9 +152,9 @@ def main(req):
 	context['data'] = db.schedule().get_all();
 	return render(req,'main.html',context)
 
-def f(x,y):
-	print(x,y)
-	return x;	
+# def f(x,y):
+# 	print(x,y)
+# 	return x;	
 
 class IncomeExpense: 
 	def ExpenseHandler(self,req):
@@ -143,7 +165,9 @@ class IncomeExpense:
 		expenses = []
 		for i in db.Expense().get_all():
 			expenses.append(list(i))
-		expenses = sorted(expenses,key = cmp_to_key(compare_dates));
+		
+		expenses = mergesort(expenses); 
+		# print(expenses)
 		expenses.insert(0,['Date','Expense'])
 		return {"ExpenseData" : expenses}
 	def IncomeHandler(self,req):
@@ -156,7 +180,7 @@ class IncomeExpense:
 			incomes.append(list(i))
 		return {"IncomeData" : incomes}
 	def Handler(self,req):
+		run()
 		context = self.ExpenseHandler(req);
 		context.update(self.IncomeHandler(req));
 		return render(req,'expense.html',context)
-

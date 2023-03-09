@@ -42,7 +42,7 @@ class trade:
 		cursor.execute('''TRUNCATE TRADE''')
 		commit()
 	def end_trade(self,trade_id):
-		cursor.execute(f'''UPDATE TRADE SET IS_END = 1 WHERE TRADE_ID == trade_id''')
+		cursor.execute(f'''UPDATE TRADE SET IS_END = 1 WHERE TRADE_ID == {trade_id}''')
 		commit()
 class PnL:
 	def create_table(self):
@@ -80,8 +80,9 @@ class Expense:
 		);
 		''')
 		commit();
-	def insert(self,amount):
-		date = str(datetime.today().strftime('%d-%m-%y'))
+	def insert(self,amount,date = None):
+		if date == None:
+			date = str(datetime.today().strftime('%d-%m-%y'))
 		chk = cursor.execute(f'''SELECT * FROM Expense WHERE Date == '{date}' ''');
 		ok = False
 		total = 0

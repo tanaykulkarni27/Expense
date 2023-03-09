@@ -12,7 +12,7 @@ function load_chart_Expense(database_data){
 	var area_chart = new google.visualization.AreaChart(document.getElementById('graph'));
 	area_chart.draw(area_data, area_options);
 	var avg = 0;
-	var cnt = Math.min(database_data.length - 1,20);
+	var cnt = Math.min(database_data.length - 1,30);
 	var itr = database_data.length - 1;
 	for(var i = 0;i < cnt;i++){
 		avg += database_data[itr][1];
